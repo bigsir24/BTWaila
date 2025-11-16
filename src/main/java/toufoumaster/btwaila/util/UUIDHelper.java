@@ -79,7 +79,7 @@ public class UUIDHelper {
         name = getUsernameFromAPI(uuid);
         UIID_TO_NAME_MAP.put(uuid, name);
 
-        return null;
+        return name;
     }
 
     public static void addMapping(@NotNull UUID uuid, @NotNull String username) {
