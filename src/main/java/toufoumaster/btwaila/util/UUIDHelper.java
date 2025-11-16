@@ -17,7 +17,7 @@ import java.util.UUID;
 public class UUIDHelper {
     private static final String MOJANG_API_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
     private static final JsonParser JSON_PARSER = new JsonParser();
-    private static final Map<@NotNull UUID, @Nullable String> UIID_TO_NAME_MAP = new HashMap<>();
+    private static final Map<@NotNull UUID, @NotNull String> UIID_TO_NAME_MAP = new HashMap<>();
     private static final UUID EMPTY_UUID = new UUID(0, 0);
     private static final String KEY_UNKNOWN_USER = "btwaila.tooltip.username.unknown";
     private static final String KEY_NONE_USER = "btwaila.tooltip.username.none";
@@ -62,9 +62,11 @@ public class UUIDHelper {
         // Null UUID means there's no owner
         if (uuid == null || EMPTY_UUID.equals(uuid)) return null;
 
-        // 1. Try fetching from map first
-        String name = UIID_TO_NAME_MAP.getOrDefault(uuid, "");
-        if (name == null || !name.isEmpty()) return name;
+        // 1. Try fetching from map first, this will either return
+        //    the username or an empty string if a fetch failed
+        //    (or null if it hasn't been mapped)
+        String name = UIID_TO_NAME_MAP.get(uuid);
+        if (name != null) return name;
 
         // 2. Try looking for "online" players with the given UUID (if the world isn't null)
         Player player;
